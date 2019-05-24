@@ -5,7 +5,7 @@ python
 .. code-block:: python
 
     import numpy
-    from mlstacking.sklearn.StackingModel import StackingModel
+    from mlstacking.sklearn import StackingModel
     from sklearn.tree import DecisionTreeClassifier
     from sklearn.ensemble import RandomForestClassifier
     from xgboost.sklearn import XGBClassifier

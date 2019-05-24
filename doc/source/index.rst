@@ -5,6 +5,8 @@
 
 mlstacking documentation
 ^^^^^^^^^^^^^^^^^^^^^^^^
+mlstacking is a Python module for sklearn-API friendly multi-layer stacking
+built on top of scikit-learn and distributed under the 3-Clause BSD license.
 
 .. toctree::
    :maxdepth: 2

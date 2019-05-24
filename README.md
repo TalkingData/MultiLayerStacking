@@ -1,6 +1,6 @@
 ## mlstacking
 
-mlstacking is a Python module for multi-layer stacking, which is sklearn-API friendly, built on top of scikit-learn and distributed under the 3-Clause BSD license.
+mlstacking is a Python module for sklearn-API friendly multi-layer stacking built on top of scikit-learn and distributed under the 3-Clause BSD license.
 
 #### Installtion
 

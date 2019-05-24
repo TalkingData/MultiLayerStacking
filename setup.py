@@ -9,12 +9,6 @@ except:
 
   
 def read(fname):
-    """
-    定义一个read方法，用来读取目录下的长描述
-    我们一般是将README文件中的内容读取出来作为长描述，这个会在PyPI中你这个包的页面上展现出来，
-    你也可以不用这个方法，自己手动写内容即可，
-    PyPI上支持.rst格式的文件。暂不支持.md格式的文件，<BR>.rst文件PyPI会自动把它转为HTML形式显示在你包的信息页面上。
-    """
     return codecs.open(os.path.join(os.path.dirname(__file__), fname)).read()
   
   
@@ -23,7 +17,7 @@ NAME = "mlstacking"
 
 PACKAGES = ["mlstacking","mlstacking/sklearn"]
   
-DESCRIPTION = "mlstacking is a Python module for multi-layer stacking"
+DESCRIPTION = "mlstacking is a Python module for sklearn-API friendly multi-layer stacking"
   
 LONG_DESCRIPTION = read("README.md")
   
@@ -35,7 +29,7 @@ AUTHOR_EMAIL = "hao.wang2@tendcloud.com"
   
 URL = "https://github.com/TalkingData/MultiLayerStacking"
   
-VERSION = "0.1.1"
+VERSION = "0.2.0"
   
 LICENSE = "BSD 3-Clause License"
   
