@@ -1,8 +1,6 @@
 ## mlstacking
 
-mlstacking is a Python module for ensemble learning built on top of scikit-learn and distributed under the 3-Clause BSD license.
-
-
+mlstacking is a Python module for multi-layer stacking, which is sklearn-API friendly, built on top of scikit-learn and distributed under the 3-Clause BSD license.
 
 #### Installtion
 
@@ -21,3 +19,8 @@ If you already have a working installation of numpy and scipy, the easiest way t
 
 `pip install mlstacking`
 
+#### Help and Support
+
+##### Documentation
+
+HTML documentation (stable release): https://mlstacking.readthedocs.io/

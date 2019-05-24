@@ -23,7 +23,7 @@ NAME = "mlstacking"
 
 PACKAGES = ["mlstacking","mlstacking/sklearn"]
   
-DESCRIPTION = "mlstacking is a Python module for ensemble learning built on top of scikit-learn and distributed under the 3-Clause BSD license."
+DESCRIPTION = "mlstacking is a Python module for multi-layer stacking"
   
 LONG_DESCRIPTION = read("README.md")
   
