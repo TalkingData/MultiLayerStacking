@@ -1,12 +1,31 @@
+# coding = UTF-8
 # Author: Hao Wang <hao.wang2@tendcloud.com>
 # License: BSD 3-Clause License
 
+"""Scikit-Learn Wrapper interface for multi-layer stacking."""
+from __future__ import absolute_import
 from sklearn.model_selection import cross_val_predict, KFold
 from sklearn.utils import check_X_y, check_array
 from sklearn.base import BaseEstimator, RegressorMixin, TransformerMixin, clone
 import numpy as np
 
 class StackingModel(BaseEstimator, RegressorMixin, TransformerMixin):
+    """Implementation of the Scikit-Learn API for multi-layer stacking.
+
+    Parameters
+    ----------
+    base_models : list
+        List of list of sklearn type classifiers
+    meta_model : object
+        Sklearn type classifiers
+    predict_mode : string
+        Specify which predict to use: average, once
+    n_folds : int
+        Depend how many folds each classifier run
+    keep_layer_results : boolean
+        Keep results of each layer or not
+    """
+
     def __init__(self, base_models, meta_model, predict_mode='average',  n_folds=5, keep_layer_results=True):
         if not hasattr(base_models[0] , '__iter__'):
             raise AttributeError("object in 'base_models' is not iterable")

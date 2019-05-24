@@ -1,3 +1,4 @@
-.pypirc
 mlstacking.egg-info
 dist
+.*
+*.pyc
