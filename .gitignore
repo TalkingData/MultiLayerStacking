@@ -1,5 +1,5 @@
 mlstacking.egg-info
 dist
-.vscode/
+.vscode
 .DS_Store
 *.pyc
