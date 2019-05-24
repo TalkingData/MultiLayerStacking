@@ -1,9 +1,12 @@
+# Author: Hao Wang <hao.wang2@tendcloud.com>
+# License: BSD 3-Clause License
+
 from sklearn.model_selection import cross_val_predict, KFold
 from sklearn.utils import check_X_y, check_array
 from sklearn.base import BaseEstimator, RegressorMixin, TransformerMixin, clone
 import numpy as np
 
-class StackingModels(BaseEstimator, RegressorMixin, TransformerMixin):
+class StackingModel(BaseEstimator, RegressorMixin, TransformerMixin):
     def __init__(self, base_models, meta_model, predict_mode='average',  n_folds=5, keep_layer_results=True):
         if not hasattr(base_models[0] , '__iter__'):
             raise AttributeError("object in 'base_models' is not iterable")
