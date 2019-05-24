@@ -15,7 +15,7 @@ def read(fname):
   
 NAME = "mlstacking"
 
-PACKAGES = ["mlstacking","mlstacking/sklearn"]
+PACKAGES = ["mlstacking",]
   
 DESCRIPTION = "mlstacking is a Python module for sklearn-API friendly multi-layer stacking"
   
