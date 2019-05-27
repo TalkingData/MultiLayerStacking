@@ -6,10 +6,11 @@
 from __future__ import absolute_import
 from sklearn.model_selection import cross_val_predict, KFold
 from sklearn.utils import check_X_y, check_array
-from sklearn.base import BaseEstimator, RegressorMixin, TransformerMixin, clone
+from sklearn.utils.metaestimators import _BaseComposition
+from sklearn.base import BaseEstimator, ClassifierMixin, TransformerMixin, clone
 import numpy as np
 
-class StackingModel(BaseEstimator, RegressorMixin, TransformerMixin):
+class StackingModel(BaseEstimator, ClassifierMixin, TransformerMixin):
     """Implementation of the Scikit-Learn API for multi-layer stacking.
 
     Parameters

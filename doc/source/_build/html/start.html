@@ -56,7 +56,7 @@
     <div class="sidebar-localtoc">
       <ul>
 <li><a class="reference internal" href="#">Python API</a><ul>
-<li><a class="reference internal" href="#module-xgboost.sklearn">Class</a></li>
+<li><a class="reference internal" href="#module-mlstacking.sklearn">Class</a></li>
 <li><a class="reference internal" href="#example">Example</a></li>
 </ul>
 </li>
@@ -105,25 +105,56 @@
             
   <div class="section" id="python-api">
 <h1>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-xgboost.sklearn">
-<span id="class"></span><h2>Class<a class="headerlink" href="#module-xgboost.sklearn" title="Permalink to this headline">¶</a></h2>
-<p>Scikit-Learn Wrapper interface for XGBoost.</p>
-<dl class="class">
-<dt id="mlstacking.sklearn.StackingModel">
-<em class="property">class </em><code class="descclassname">mlstacking.sklearn.</code><code class="descname">StackingModel</code><span class="sig-paren">(</span><em>base_models</em>, <em>meta_model</em>, <em>predict_mode='average'</em>, <em>n_folds=5</em>, <em>keep_layer_results=True</em><span class="sig-paren">)</span><a class="headerlink" href="#mlstacking.sklearn.StackingModel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implementation of the Scikit-Learn API for multi-layer stacking.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>base_models</strong> (<em>list</em>) – List of list of sklearn type classifiers</p></li>
-<li><p><strong>meta_model</strong> (<em>object</em>) – Sklearn type classifiers</p></li>
-<li><p><strong>predict_mode</strong> (<em>string</em>) – Specify which predict to use: average, once</p></li>
-<li><p><strong>n_folds</strong> (<em>int</em>) – Depend how many folds each classifier run</p></li>
-<li><p><strong>keep_layer_results</strong> (<em>boolean</em>) – Keep results of each layer or not</p></li>
+<div class="section" id="module-mlstacking.sklearn">
+<span id="class"></span><h2>Class<a class="headerlink" href="#module-mlstacking.sklearn" title="Permalink to this headline">¶</a></h2>
+<p>Create a new <cite>Mock</cite> object. <cite>Mock</cite> takes several optional arguments
+that specify the behaviour of the Mock object:</p>
+<ul>
+<li><p><cite>spec</cite>: This can be either a list of strings or an existing object (a
+class or instance) that acts as the specification for the mock object. If
+you pass in an object then a list of strings is formed by calling dir on
+the object (excluding unsupported magic attributes and methods). Accessing
+any attribute not in this list will raise an <cite>AttributeError</cite>.</p>
+<p>If <cite>spec</cite> is an object (rather than a list of strings) then
+<cite>mock.__class__</cite> returns the class of the spec object. This allows mocks
+to pass <cite>isinstance</cite> tests.</p>
+</li>
+<li><p><cite>spec_set</cite>: A stricter variant of <cite>spec</cite>. If used, attempting to <em>set</em>
+or get an attribute on the mock that isn’t on the object passed as
+<cite>spec_set</cite> will raise an <cite>AttributeError</cite>.</p></li>
+<li><p><cite>side_effect</cite>: A function to be called whenever the Mock is called. See
+the <cite>side_effect</cite> attribute. Useful for raising exceptions or
+dynamically changing return values. The function is called with the same
+arguments as the mock, and unless it returns <cite>DEFAULT</cite>, the return
+value of this function is used as the return value.</p>
+<p>Alternatively <cite>side_effect</cite> can be an exception class or instance. In
+this case the exception will be raised when the mock is called.</p>
+<p>If <cite>side_effect</cite> is an iterable then each call to the mock will return
+the next value from the iterable. If any of the members of the iterable
+are exceptions they will be raised instead of returned.</p>
+</li>
+<li><p><cite>return_value</cite>: The value returned when the mock is called. By default
+this is a new Mock (created on first access). See the
+<cite>return_value</cite> attribute.</p></li>
+<li><p><cite>wraps</cite>: Item for the mock object to wrap. If <cite>wraps</cite> is not None then
+calling the Mock will pass the call through to the wrapped object
+(returning the real result). Attribute access on the mock will return a
+Mock object that wraps the corresponding attribute of the wrapped object
+(so attempting to access an attribute that doesn’t exist will raise an
+<cite>AttributeError</cite>).</p>
+<p>If the mock has an explicit <cite>return_value</cite> set then calls are not passed
+to the wrapped object and the <cite>return_value</cite> is returned instead.</p>
+</li>
+<li><p><cite>name</cite>: If the mock has a name then it will be used in the repr of the
+mock. This can be useful for debugging. The name is propagated to child
+mocks.</p></li>
 </ul>
-</dd>
-</dl>
-</dd></dl>
+<p>Mocks can also be called with arbitrary keyword arguments. These will be
+used to set attributes on the mock after it is created.</p>
+<dl class="attribute">
+<dt id="mlstacking.sklearn.StackingModel">
+<code class="descclassname">mlstacking.sklearn.</code><code class="descname">StackingModel</code><a class="headerlink" href="#mlstacking.sklearn.StackingModel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </div>
 <div class="section" id="example">

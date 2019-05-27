@@ -13,14 +13,9 @@
 import os
 import sys
 import guzzle_sphinx_theme
-import mock
 
 curr_path = os.path.dirname(os.path.abspath(os.path.expanduser(__file__)))
 sys.path.insert(0, os.path.join(curr_path, '../../'))
-
-MOCK_MODULES = ['sklearn', 'mlstacking']
-for mod_name in MOCK_MODULES:
-  sys.modules[mod_name] = mock.Mock()
 
 # -- Project information -----------------------------------------------------
 
@@ -51,7 +46,6 @@ extensions = [
 ]
 
 autoclass_content = "both"
-autodoc_mock_imports = ["numpy","sklearn","pandas"]
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 

@@ -2,7 +2,7 @@ Python API
 ^^^^^^^^^^
 Class
 ------
-.. automodule:: xgboost.sklearn
+.. automodule:: mlstacking.sklearn
 .. autoclass:: mlstacking.sklearn.StackingModel
 
 Example
