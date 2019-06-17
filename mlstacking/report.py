@@ -95,16 +95,28 @@ class GenerateReport():
             plt.xlim([-0.05, 1.05])
             plt.ylim([-0.05, 1.05])
             i += 1
-            
-            features_temp = pd.DataFrame({classifier: features.columns, 'importance': instance.coef_[0] if classifier=='LR' else instance.feature_importances_})
-            features_temp = features_temp.sort_values('importance',ascending=False).head(min(20,len(features.columns)))
-            features_temp = features_temp.reset_index(drop=True)
-            self.feature_importance.append(features_temp)
+
+            try:
+                features_temp = pd.DataFrame({classifier: features.columns, 'importance': instance.coef_[0] if classifier=='LR' else instance.feature_importances_})
+                features_temp = features_temp.sort_values('importance',ascending=False).head(min(20,len(features_temp)))
+                features_temp = features_temp.reset_index(drop=True)
+                self.feature_importance.append(features_temp)
+            except:
+                print('no feature name exist')
         plt.savefig(self.imgbuffer,format='png')
 
     def print(self,filepath):
-        report_path = os.path.join(filepath,'report.md')
-        if os.path.exists(report_path): os.remove(report_path)
+        
+        # 
+        if os.path.isfile(filepath):
+            if os.path.exists(filepath):
+                os.remove(filepath)
+            report_path = filepath
+        else:
+            if not os.path.exists(filepath):
+                os.makedirs(filepath)
+            report_path = os.path.join(filepath,'report.md')
+            
         with open(report_path,'w') as file:
             file.write('## 1 分类器结果\n\n | 分类器 | 参数 | AUC |\n | ------ | ------ | ------ |\n')
             for class_dict in self.results:
@@ -113,8 +125,9 @@ class GenerateReport():
             base64_str = base64.b64encode(self.imgbuffer.getvalue())
             file.write('![desc](data:image/png;base64,' + str(base64_str, encoding='utf-8')+')\n')
             file.write('\n## 3 特征描述\n')
-            feature_importance_out = pd.concat(self.feature_importance,axis=1)
-            feature_importance_out = pd.concat([pd.DataFrame([['------',]*len(feature_importance_out.columns)], columns=feature_importance_out.columns),feature_importance_out])
-            form_out = io.StringIO()
-            feature_importance_out.to_csv(form_out, sep="|", index=False)
-            file.write(form_out.getvalue()) 
+            if self.feature_importance!=[]: 
+                feature_importance_out = pd.concat(self.feature_importance,axis=1)
+                feature_importance_out = pd.concat([pd.DataFrame([['------',]*len(feature_importance_out.columns)], columns=feature_importance_out.columns),feature_importance_out])
+                form_out = io.StringIO()
+                feature_importance_out.to_csv(form_out, sep="|", index=False)
+                file.write(form_out.getvalue()) 
