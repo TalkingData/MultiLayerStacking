@@ -71,7 +71,7 @@ class GenerateReport():
             if self.search:
                 objective = partial(self.objective, model=instance, features=features,labels=labels)
                 trials = Trials()
-                max_evals = self.search if isinstance(self.search, int) else 10
+                max_evals = 10 if isinstance(self.search, bool) else self.search
                 best = fmin(fn=objective, space=self.space[classifier], trials=trials, algo=tpe.suggest, max_evals=max_evals)
                 instance.set_params(**space_eval(self.space[classifier], best))
                 self.results.append({
