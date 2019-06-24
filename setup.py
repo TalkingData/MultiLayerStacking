@@ -29,9 +29,19 @@ AUTHOR_EMAIL = "hao.wang2@tendcloud.com"
   
 URL = "https://github.com/TalkingData/MultiLayerStacking"
   
-VERSION = "0.2.6"
+VERSION = "0.3.0"
   
 LICENSE = "BSD 3-Clause License"
+
+INSTALL_REQUIRES = [
+    'pandas >= 0.20.0', 
+    'xgboost >= 0.7', 
+    'lightgbm >= 2.2.3', 
+    'matplotlib >= 2.1.2', 
+    'hyperopt >= 0.1.2',
+    'numpy >= 1.11.0',
+    'scikit-learn >= 0.20.0',
+]
   
 setup(
     name = NAME,
@@ -52,4 +62,5 @@ setup(
     packages = PACKAGES,
     include_package_data=True,
     zip_safe=True,
+    install_requires=INSTALL_REQUIRES,
 )

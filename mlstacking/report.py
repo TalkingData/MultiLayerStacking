@@ -3,11 +3,13 @@ import io
 import os
 import warnings
 from functools import partial
+from multiprocessing import cpu_count
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from hyperopt import STATUS_OK, Trials, fmin, hp, space_eval, tpe
+from lightgbm import LGBMClassifier
 from sklearn import tree
 from sklearn.base import clone
 from sklearn.ensemble import RandomForestClassifier
@@ -22,16 +24,17 @@ warnings.filterwarnings('ignore')
 class GenerateReport():
     def __init__(self, search=False, classifiers=['LR','XG']):
         self.models = {
-            'LR': LogisticRegression(solver="sag", n_jobs=-1),
-            'RF': RandomForestClassifier(n_jobs=-1),
-            'XG': XGBClassifier(n_jobs=-1),
+            'LR': LogisticRegression(solver="saga", n_jobs=cpu_count()),
+            'RF': RandomForestClassifier(n_jobs=cpu_count()),
+            'XG': XGBClassifier(n_jobs=cpu_count()),
+            'LG': LGBMClassifier(n_jobs=cpu_count()),
             'DT': tree.DecisionTreeClassifier(max_depth=3),
         }
         self.space = {}
         self.space['XG'] = {
-            'max_depth': hp.choice('max_depth', [*range(1,16)]),
-            'learning_rate': hp.loguniform('learning_rate', np.log(0.01), np.log(0.5)),
-            'n_estimators': hp.choice('n_estimators', [*range(25,275,25)]),
+            'max_depth': hp.quniform('max_depth', 1, 15, 1),
+            'learning_rate': hp.uniform('learning_rate', 0.01, 0.5),
+            'n_estimators': hp.qloguniform('n_estimators', np.log(30), np.log(150), 10),
             'min_child_weight': hp.uniform("min_child_weight", 0, 10),
             'max_delta_step': hp.uniform("max_delta_step", 0, 10),
             'subsample': hp.uniform('subsample', 0.8, 1),
@@ -41,15 +44,27 @@ class GenerateReport():
         }
         self.space['LR'] = {
             'C': hp.uniform("C", 0, 10),
-            'solver': hp.choice('solver', ['newton-cg', 'lbfgs', 'liblinear','sag', 'saga']),
+            'penalty': hp.choice('penalty', ['l1', 'l2','none']),
         }
         self.space['RF'] = {
-            'max_depth': hp.choice('max_depth', [*range(1,16)]),
-            'n_estimators': hp.choice('n_estimators', [*range(25,275,25)]),
+            'max_depth': hp.quniform('max_depth', 1, 15, 1),
+            'n_estimators': hp.qloguniform('n_estimators', np.log(20), np.log(200), 10),
             'criterion': hp.choice('criterion', ['gini','entropy']),
-            'min_samples_split': hp.uniform('min_samples_split', 0, 100), 
-            'min_samples_leaf': hp.uniform('min_samples_leaf', 0, 100), 
+            'min_samples_split': hp.uniform('min_samples_split', 0.000001, 0.5), 
+            'min_samples_leaf': hp.uniform('min_samples_leaf', 0.000001, 0.5), 
             'max_features': hp.choice('max_features', ['auto', 'log2', 0.5]),
+        }
+        self.space['LG'] = {
+            'num_leaves': hp.qloguniform('num_leaves', np.log(8), np.log(1024), 2),
+            'learning_rate': hp.uniform('learning_rate', 0.01, 0.5),
+            'n_estimators': hp.qloguniform('n_estimators', np.log(30), np.log(150), 10),
+            'subsample_for_bin': hp.qloguniform('subsample_for_bin', np.log(10000), np.log(250000), 10000),
+            'min_child_weight': hp.uniform("min_child_weight", 0, 10),
+            'subsample': hp.uniform('subsample', 0.5, 1),
+            'subsample_freq': hp.quniform('max_depth', 0, 10, 1),
+            'colsample_bytree': hp.uniform('colsample_bytree', 0.5, 1),
+            'reg_alpha':  hp.uniform("reg_alpha", 0, 10),
+            'reg_lambda': hp.uniform("reg_lambda", 0, 10),
         }
         self.classifiers = classifiers
         self.search = search
@@ -69,10 +84,11 @@ class GenerateReport():
                 'Score': cross_val_score(instance, features, labels, cv=4, scoring='roc_auc').mean()
             })
             if self.search:
-                objective = partial(self.objective, model=instance, features=features,labels=labels)
+                instance = clone(self.models[classifier])
+                objective = partial(self.objective, model=instance, features=features, labels=labels)
                 trials = Trials()
                 best = fmin(fn=objective, space=self.space[classifier], trials=trials, algo=tpe.suggest, max_evals=self.max_evals)
-                instance.set_params(**space_eval(self.space[classifier], best))
+                instance.set_params(**self.fixQuniform(space_eval(self.space[classifier], best)))
                 self.results.append({
                     'Name': classifier+'_Tuned',
                     'Params': instance.get_params(),
@@ -135,5 +151,13 @@ class GenerateReport():
                 file.write(form_out.getvalue()) 
         
     def objective(self, hyperparams, model, features, labels):
-        score = cross_val_score(model.set_params(**hyperparams), features, labels, cv=4, scoring='roc_auc').mean()
+        model.set_params(**self.fixQuniform(hyperparams))
+        score = cross_val_score(estimator=model, X=features, y=labels, cv=4, scoring='roc_auc').mean()
         return {'loss': -score, 'status': STATUS_OK}
+    
+    def fixQuniform(self,params):
+        temp = params.copy()
+        for parameter in ['max_depth','n_estimators','num_leaves','subsample_for_bin','subsample_freq']: 
+            if parameter in temp:
+                temp[parameter] = int(temp[parameter])
+        return temp
