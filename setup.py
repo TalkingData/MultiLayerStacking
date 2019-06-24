@@ -29,7 +29,7 @@ AUTHOR_EMAIL = "hao.wang2@tendcloud.com"
   
 URL = "https://github.com/TalkingData/MultiLayerStacking"
   
-VERSION = "0.2.5"
+VERSION = "0.2.6"
   
 LICENSE = "BSD 3-Clause License"
   

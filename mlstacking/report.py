@@ -7,7 +7,6 @@ from functools import partial
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import pydotplus
 from hyperopt import STATUS_OK, Trials, fmin, hp, space_eval, tpe
 from sklearn import tree
 from sklearn.base import clone
@@ -136,5 +135,5 @@ class GenerateReport():
                 file.write(form_out.getvalue()) 
         
     def objective(self, hyperparams, model, features, labels):
-        score = cross_val_score({**hyperparams}, model, features, labels, cv=4, scoring='roc_auc').mean()
+        score = cross_val_score(model.set_params(**hyperparams), features, labels, cv=4, scoring='roc_auc').mean()
         return {'loss': -score, 'status': STATUS_OK}

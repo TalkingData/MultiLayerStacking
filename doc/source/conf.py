@@ -25,7 +25,7 @@ author = 'Hao Wang'
 github_doc_root = 'https://github.com/TalkingData/MultiLayerStacking/tree/master/doc'
 
 # The full version, including alpha/beta/rc tags
-release = '0.2.5'
+release = '0.2.6'
 
 
 # -- General configuration ---------------------------------------------------
