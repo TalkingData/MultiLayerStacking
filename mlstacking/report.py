@@ -54,6 +54,7 @@ class GenerateReport():
         }
         self.classifiers = classifiers
         self.search = search
+        self.max_evals = 10 if isinstance(search, bool) else search
         self.results = []
         self.feature_importance = []
         self.imgbuffer = io.BytesIO()
@@ -71,8 +72,7 @@ class GenerateReport():
             if self.search:
                 objective = partial(self.objective, model=instance, features=features,labels=labels)
                 trials = Trials()
-                max_evals = 10 if isinstance(self.search, bool) else self.search
-                best = fmin(fn=objective, space=self.space[classifier], trials=trials, algo=tpe.suggest, max_evals=max_evals)
+                best = fmin(fn=objective, space=self.space[classifier], trials=trials, algo=tpe.suggest, max_evals=self.max_evals)
                 instance.set_params(**space_eval(self.space[classifier], best))
                 self.results.append({
                     'Name': classifier+'_Tuned',
@@ -136,5 +136,5 @@ class GenerateReport():
                 file.write(form_out.getvalue()) 
         
     def objective(self, hyperparams, model, features, labels):
-        score = cross_val_score(model, features, labels, cv=4, scoring='roc_auc').mean()
+        score = cross_val_score({**hyperparams}, model, features, labels, cv=4, scoring='roc_auc').mean()
         return {'loss': -score, 'status': STATUS_OK}
